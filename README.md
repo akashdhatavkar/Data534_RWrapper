@@ -1,2 +1,2 @@
 # Data534_RWrapper
-This repository contains the all our work for the Wrapper for our Fireball API 
+This repository contains all our work for our Package that creates an R Wrapper for NASA's Fireball API 
