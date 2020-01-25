@@ -19,7 +19,10 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: This package will download NASAs fireball dataset. 
   It will let you select the variables you wish to view and also provide some other variables
-  that have been Feature Engineered so that you have a consubable data ready to use
+  that have been Feature Engineered so that you have a consubable data ready to use.
+Imports:
+    jsonlite,
+    httr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

@@ -15,5 +15,5 @@ fireball_data(lim, min_e = NULL)
 Wrapper for downloading NASA's Fireball Data
 }
 \examples{
-fire_data(lim = 10, min_e = 0.6)
+fireball_data(lim = 10, min_e = 0.6)
 }

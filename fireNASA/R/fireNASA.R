@@ -1,6 +1,3 @@
-if(!require(httr)){install.packages("httr")};require(httr)
-if(!require(jsonlite)){install.packages("jsonlite")};require(jsonlite)
-
 ##----- Creating Function for API Get Request -----##
 #' @title fireball_data
 #'
@@ -9,12 +6,13 @@ if(!require(jsonlite)){install.packages("jsonlite")};require(jsonlite)
 #' @param lim Number of Rows needed
 #' @param min_e Exclude Data with Total-Radiated-Energy less than this positive value
 #'
+#' @import httr jsonlite
 #' @export
 #'
 #' @examples
-#' fire_data(lim = 10, min_e = 0.6)
+#' fireball_data(lim = 10, min_e = 0.6)
 fireball_data <- function(lim, min_e = NULL) {
-  url <- modify_url("https://ssd-api.jpl.nasa.gov/fireball.api")
+  url <- httr::modify_url("https://ssd-api.jpl.nasa.gov/fireball.api")
   if(is.null(min_e)){
     resp <- GET(url, query  = list(limit = lim,`energy-min` = 0.6))
   }else{
