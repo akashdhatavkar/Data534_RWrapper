@@ -1,13 +1,26 @@
 Package: fireNASA
-Title: What the Package Does (One Line, Title Case)
+Title: Wrapper to Download NASA's Fireball API dataset
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Alex",
+           family = "Tamm",
            role = c("aut", "cre"),
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+    person(given = "Michael",
+           family = "Labun",
+           role = c("aut", "cre"),
+           email = "first.last@example.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+    person(given = "Akash",
+           family = "Dhatavkar",
+           role = c("aut", "cre"),
+           email = "first.last@example.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: This package will download NASAs fireball dataset. 
+  It will let you select the variables you wish to view and also provide some other variables
+  that have been Feature Engineered so that you have a consubable data ready to use
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.0.2
