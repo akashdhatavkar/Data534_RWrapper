@@ -63,7 +63,7 @@ fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, m
   url <- httr::modify_url("https://ssd-api.jpl.nasa.gov/fireball.api")
   resp <- GET(url, query  = list(`date-min` = date_min, `date-max` = date_max, `energy-min` = min_energy,
                                  `energy-max` = max_energy, `vel-min` = min_velocity, `vel-max` = max_velocity,
-                                  limit = lim))
+                                 limit = lim))
 
   parsed <- jsonlite::fromJSON(content(resp,"text"))
   as <- as.data.frame(parsed[["data"]])
