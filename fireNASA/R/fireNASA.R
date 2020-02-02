@@ -70,3 +70,4 @@ fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, m
   colnames(as) <- parsed[["fields"]]
   return(as)
 }
+
