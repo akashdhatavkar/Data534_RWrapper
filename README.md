@@ -1,2 +1,16 @@
-# Data534_RWrapper
-This repository contains all our work for our Package that creates an R Wrapper for NASA's Fireball API 
+
+[![Travis build
+status](https://travis-ci.org/akashdhatavkar/Data534_RWrapper.svg?branch=master)](https://travis-ci.org/akashdhatavkar/Data534_RWrapper)
+
+## fireball\_data
+
+The objective of fireNASA is to provide the user with a clean consumable
+data from NASA’s fireball API based on the users criteria
+
+## Installation
+
+`install.packages("fireNASA")`
+
+## Example
+
+`fireNASA::fireball_data(date_min = "2015-01-01", lim = 50)`

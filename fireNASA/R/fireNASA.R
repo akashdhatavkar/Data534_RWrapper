@@ -13,9 +13,9 @@
 #'
 #' @import httr jsonlite
 #' @export
-#'
-#' @examples
-#' fireball_data(date_min = "2015-01-01", max_energy = 0.6, lim = 10)
+#' @usage fireball_data(date_min, date_max, min_energy, max_energy, min_velocity,
+#'      max_velocity, min_altitude, max_altitude, lim)
+#' @examples fireball_data(date_min = "2015-01-01", max_energy = 0.6, lim = 10)
 fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, max_energy = NULL,
                           min_velocity = NULL, max_velocity = NULL, min_altitude = NULL, max_altitude = NULL
                           ,lim = NULL) {
