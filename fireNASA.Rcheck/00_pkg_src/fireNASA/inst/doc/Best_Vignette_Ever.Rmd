@@ -1,0 +1,20 @@
+---
+title: "Fire NASA Vignette"
+author: "Akash Dhatavkar, Alex Tamm, Michael Labun"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fire NASA Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(fireNASA)
+```

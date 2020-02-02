@@ -23,8 +23,10 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.2
-Suggests: 
-    knitr,
-    rmarkdown
+Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 Imports: jsonlite
+NeedsCompilation: no
+Packaged: 2020-02-02 22:26:51 UTC; mike
+Author: Akash Dhatavkar [aut, cre] (<https://orcid.org/YOUR-ORCID-ID>)
+Maintainer: Akash Dhatavkar <first.last@example.com>
