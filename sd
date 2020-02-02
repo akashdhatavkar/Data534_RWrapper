@@ -1,0 +1,53 @@
+[33mcommit 28f8b2aabe233d0cb1fac35adc981cdcba5471d0[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/akash_working[m[33m, [m[1;32makash_working[m[33m)[m
+Author: akashdhatavkar <dhatavkar13akash@gmail.com>
+Date:   Mon Jan 27 11:20:58 2020 -0800
+
+    Test
+
+[33mcommit 507960d9ac0ff653ae1b1974fd607f61f8f611eb[m
+Author: akashdhatavkar <dhatavkar13akash@gmail.com>
+Date:   Sun Jan 26 19:52:12 2020 -0800
+
+    Added more parameters to the function
+
+[33mcommit 33c711c86ce0ee61c0fce02c0ed5cb4fce7a060e[m
+Author: akashdhatavkar <dhatavkar13akash@gmail.com>
+Date:   Sun Jan 26 18:23:19 2020 -0800
+
+    Removing yml
+
+[33mcommit 5b09de30035b778f688350a4d4b7fc385ef3f01e[m
+Author: akashdhatavkar <dhatavkar13akash@gmail.com>
+Date:   Sat Jan 25 12:30:58 2020 -0800
+
+    Checked Dependencies of Packages
+
+[33mcommit ec6f5d21f0781aa43ffcd879a5c90b3f40aa7bbf[m
+Author: akashdhatavkar <dhatavkar13akash@gmail.com>
+Date:   Sat Jan 25 11:59:39 2020 -0800
+
+    yml file test
+
+[33mcommit a7187264d1d68025132d7571773fc7fd81384b6f[m[33m ([m[1;31morigin/alex[m[33m)[m
+Author: akashdhatavkar <dhatavkar13akash@gmail.com>
+Date:   Sat Jan 25 11:37:55 2020 -0800
+
+    Initial Documentation and Skeleton of Package
+
+[33mcommit 4a4a5b33a9b83a692393ed702050ae3908762f4c[m
+Author: akashdhatavkar <dhatavkar13akash@gmail.com>
+Date:   Fri Jan 24 17:19:26 2020 -0800
+
+    Pushing Package Skeleton
+
+[33mcommit 453516803f0f5dacd777c4bb70cb9d23a7dc4fb5[m
+Author: akashdhatavkar <54077198+akashdhatavkar@users.noreply.github.com>
+Date:   Fri Jan 24 11:03:31 2020 -0800
+
+    Update README.md
+
+[33mcommit 46654bb67698ab9ed2ba6e617d3df9d1487ca4d6[m
+Author: akashdhatavkar <54077198+akashdhatavkar@users.noreply.github.com>
+Date:   Fri Jan 24 10:57:07 2020 -0800
+
+    Initial commit
