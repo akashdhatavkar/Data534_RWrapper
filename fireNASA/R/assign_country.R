@@ -31,18 +31,18 @@ assign_country <- function(inp_df) {
 #' @param x coordinate point to process (can be latitude or longitude)
 #' @param direction N/S for Latitude, E/W for Longitude
 #'
-#' @return coordinate point with correct sign applied relative to equator (south=negative) or prime meridan (west=negative)
+#' @return numeric with correct sign applied relative to equator (south=negative) or prime meridan (west=negative)
 #'
 #'
 #'
 clean_latlon <- function(x, direction) {
   x <- as.numeric(x)
   if (is.na(x) | is.na(direction)){
-    val <- x
+    val <- abs(x)
   } else {
-    val <- x
+    val <- abs(x)
     if(direction=="S"|direction=="W") {
-      val <- -val}
+      val <- -abs(val)} #ignore whatever the original sign is, apply correct sign
   }
   return(val)
 
