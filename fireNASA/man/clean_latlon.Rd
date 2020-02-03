@@ -12,7 +12,7 @@ clean_latlon(x, direction)
 \item{direction}{N/S for Latitude, E/W for Longitude}
 }
 \value{
-coordinate point with correct sign applied relative to equator (south=negative) or prime meridan (west=negative)
+numeric with correct sign applied relative to equator (south=negative) or prime meridan (west=negative)
 }
 \description{
 Clean Latitude or Longitude values

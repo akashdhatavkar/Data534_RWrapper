@@ -35,5 +35,5 @@ fireball_data(
 Wrapper for downloading NASA's Fireball Data
 }
 \examples{
-fireball_data(date_min = "2015-01-01", max_energy = 0.6, lim = 10)
+fireball_data(date_min = "2015-01-01", min_energy = 0.6, lim = 10)
 }
