@@ -12,6 +12,8 @@
 assign_country <- function(inp_df) {
   #Map data has already been prepped (can see script in the data-raw folder).
   #The planar-transformed version of the worldmap is saved as worldmap_planar.rda
+  #But need to state that it is a global variable
+  #utils::globalVariables(c(worldmap_planar))
 
   #Turn the fireball coordinates into numeric values
   #NOTE: If there NA's in the data, the resulting columns will have to be changed to numeric
