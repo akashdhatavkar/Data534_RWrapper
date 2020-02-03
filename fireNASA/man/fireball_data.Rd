@@ -11,8 +11,6 @@ fireball_data(
   max_energy = NULL,
   min_velocity = NULL,
   max_velocity = NULL,
-  min_altitude = NULL,
-  max_altitude = NULL,
   lim = NULL
 )
 }
