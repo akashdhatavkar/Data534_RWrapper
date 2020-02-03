@@ -4,3 +4,7 @@ language: R
 cache: packages
 before_install:
   - cd fireNASA
+addons:
+  apt:
+    packages:
+      - libudunits2-dev
