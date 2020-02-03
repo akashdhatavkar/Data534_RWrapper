@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' fireball_data(date_min = "2015-01-01", max_energy = 0.6, lim = 10)
+#' fireball_data(date_min = "2015-01-01", min_energy = 0.6, lim = 10)
 fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, max_energy = NULL,
                           min_velocity = NULL, max_velocity = NULL, min_altitude = NULL, max_altitude = NULL
                           ,lim = NULL) {
@@ -61,10 +61,9 @@ fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, m
   }
 
   url <- httr::modify_url("https://ssd-api.jpl.nasa.gov/fireball.api")
-  resp <- GET(url, query  = list(`date-min` = date_min, `date-max` = date_max, `energy-min` = min_energy,
+  resp <- httr::GET(url, query  = list(`date-min` = date_min, `date-max` = date_max, `energy-min` = min_energy,
                                  `energy-max` = max_energy, `vel-min` = min_velocity, `vel-max` = max_velocity,
                                  limit = lim))
-
   parsed <- jsonlite::fromJSON(content(resp,"text"))
   resultdf <- as.data.frame(parsed[["data"]])
   colnames(resultdf) <- parsed[["fields"]]
