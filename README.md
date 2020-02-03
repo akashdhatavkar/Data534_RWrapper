@@ -1,6 +1,4 @@
-
-[![Travis build
-status](https://travis-ci.org/akashdhatavkar/Data534_RWrapper.svg?branch=master)](https://travis-ci.org/akashdhatavkar/Data534_RWrapper)
+[![Build Status](https://travis-ci.org/akashdhatavkar/Data534_RWrapper.svg?branch=master)](https://travis-ci.org/akashdhatavkar/Data534_RWrapper)
 
 ## fireball\_data
 
