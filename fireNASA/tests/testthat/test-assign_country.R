@@ -49,7 +49,7 @@ test_that("Check for proper responses in clean_latlon helper function", {
   expect_equal(clean_latlon(-25.1,"s"),25.1)
   expect_equal(clean_latlon(-25.1,"e"),25.1)
   expect_equal(clean_latlon(-25.1,"w"),25.1)
-  expect_null(clean_latlon(NA,"N"),abs(NA))
+  expect_equal(clean_latlon(NA,"N"),abs(NA))
   expect_equal(clean_latlon(25.1,NA),25.1)
   expect_equal(clean_latlon(-25.1,NA),25.1)
   expect_equal(clean_latlon(NA,NA),abs(NA))
