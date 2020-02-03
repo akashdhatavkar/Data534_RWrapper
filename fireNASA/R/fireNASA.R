@@ -66,8 +66,12 @@ fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, m
                                  limit = lim))
 
   parsed <- jsonlite::fromJSON(content(resp,"text"))
-  as <- as.data.frame(parsed[["data"]])
-  colnames(as) <- parsed[["fields"]]
-  return(as)
+  resultdf <- as.data.frame(parsed[["data"]])
+  colnames(resultdf) <- parsed[["fields"]]
+  #convert any factors to characters
+  inds <- sapply(resultdf, is.factor)
+  resultdf[inds] <- lapply(resultdf[inds], as.character)
+  resultdf <- assign_country(resultdf)
+  return(resultdf)
 }
 
