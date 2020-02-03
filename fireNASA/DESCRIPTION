@@ -22,7 +22,8 @@ Description: This package will download NASAs fireball dataset.
   that have been Feature Engineered so that you have a consubable data ready to use.
 Imports:
     jsonlite,
-    httr
+    httr,
+    sf
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
