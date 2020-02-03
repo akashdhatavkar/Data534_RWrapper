@@ -16,4 +16,4 @@ os:
     - linux
 
 r:
-    - 3.4
+    - release
