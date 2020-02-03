@@ -8,3 +8,9 @@ addons:
   apt:
     packages:
       - libudunits2-dev
+
+os:
+    - linux
+
+r:
+    - 3.4
