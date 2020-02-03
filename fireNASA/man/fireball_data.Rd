@@ -4,7 +4,15 @@
 \alias{fireball_data}
 \title{fireball_data}
 \usage{
-fireball_data(date_min, date_max, min_energy, max_energy, min_velocity, max_velocity, min_altitude, max_altitude, lim)
+fireball_data(
+  date_min = NULL,
+  date_max = NULL,
+  min_energy = NULL,
+  max_energy = NULL,
+  min_velocity = NULL,
+  max_velocity = NULL,
+  lim = NULL
+)
 }
 \arguments{
 \item{date_min}{Exclude data earlier than this date YYYY-MM-DD or date/time YYYY-MM-DDThh:mm:ss}
@@ -25,5 +33,5 @@ fireball_data(date_min, date_max, min_energy, max_energy, min_velocity, max_velo
 Wrapper for downloading NASA's Fireball Data
 }
 \examples{
-fireball_data(date_min = "2015-01-01", max_energy = 0.6, lim = 10)
+fireball_data(date_min = "2015-01-01", min_energy = 0.6, lim = 10)
 }

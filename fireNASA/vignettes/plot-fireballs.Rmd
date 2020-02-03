@@ -1,0 +1,22 @@
+---
+title: "plot-fireballs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{plot-fireballs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(fireNASA)
+print("HELLO WORLD! I'M A VIGNETTE")
+
+```
+Here is some example text that I've added.

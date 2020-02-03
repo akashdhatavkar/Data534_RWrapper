@@ -3,3 +3,4 @@
 export(fireball_data)
 import(httr)
 import(jsonlite)
+import(sf)
