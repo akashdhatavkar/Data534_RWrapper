@@ -11,14 +11,15 @@
 #' @param max_velocity Exclude data with velocity-at-peak-brightness greater than this positive value in km/s (e.g., 20)
 #' @param lim Number of rows to be displayed
 #'
-#' @import httr jsonlite
+#' @import httr jsonlite sf
 #' @export
 #' @usage fireball_data(date_min, date_max, min_energy, max_energy, min_velocity,
 #'      max_velocity, min_altitude, max_altitude, lim)
-#' @examples fireball_data(date_min = "2015-01-01", max_energy = 0.6, lim = 10)
+#' @examples
+#' fireball_data(date_min = "2015-01-01", min_energy = 0.6, lim = 10)
+
 fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, max_energy = NULL,
-                          min_velocity = NULL, max_velocity = NULL, min_altitude = NULL, max_altitude = NULL
-                          ,lim = NULL) {
+                          min_velocity = NULL, max_velocity = NULL, lim = NULL) {
 
   if(is.null(date_min)){
     date_min <- as.Date("1990-01-01", format = "%Y-%m-%d")
@@ -61,13 +62,16 @@ fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, m
   }
 
   url <- httr::modify_url("https://ssd-api.jpl.nasa.gov/fireball.api")
-  resp <- GET(url, query  = list(`date-min` = date_min, `date-max` = date_max, `energy-min` = min_energy,
+  resp <- httr::GET(url, query  = list(`date-min` = date_min, `date-max` = date_max, `energy-min` = min_energy,
                                  `energy-max` = max_energy, `vel-min` = min_velocity, `vel-max` = max_velocity,
                                  limit = lim))
-
   parsed <- jsonlite::fromJSON(content(resp,"text"))
-  as <- as.data.frame(parsed[["data"]])
-  colnames(as) <- parsed[["fields"]]
-  return(as)
+  resultdf <- as.data.frame(parsed[["data"]])
+  colnames(resultdf) <- parsed[["fields"]]
+  #convert any factors to characters
+  inds <- sapply(resultdf, is.factor)
+  resultdf[inds] <- lapply(resultdf[inds], as.character)
+  resultdf <- assign_country(resultdf)
+  return(resultdf)
 }
 
