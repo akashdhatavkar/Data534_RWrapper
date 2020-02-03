@@ -11,7 +11,7 @@
 #' @param max_velocity Exclude data with velocity-at-peak-brightness greater than this positive value in km/s (e.g., 20)
 #' @param lim Number of rows to be displayed
 #'
-#' @import httr jsonlite
+#' @import httr jsonlite sf
 #' @export
 #'
 #' @examples
