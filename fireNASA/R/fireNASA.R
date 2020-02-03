@@ -17,8 +17,7 @@
 #' @examples
 #' fireball_data(date_min = "2015-01-01", min_energy = 0.6, lim = 10)
 fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, max_energy = NULL,
-                          min_velocity = NULL, max_velocity = NULL, min_altitude = NULL, max_altitude = NULL
-                          ,lim = NULL) {
+                          min_velocity = NULL, max_velocity = NULL, lim = NULL) {
 
   if(is.null(date_min)){
     date_min <- as.Date("1990-01-01", format = "%Y-%m-%d")
