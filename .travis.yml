@@ -3,6 +3,8 @@
 language: R
 cache: packages
 before_install:
+fdsa
+  - R -e source("https://install-github.me/r-lib/remotes")
   - cd fireNASA
 addons:
   apt:
