@@ -69,15 +69,15 @@ find_country <- function(x,y) {
     y<-as.numeric(y)
 
     #Create a simple feature
-    temp_pnt <- st_point(c(x,y))
+    temp_pnt <- sf::st_point(c(x,y))
     #Create a simple feature geometry list column
     #Using EPSG:4326 which is the EPSG definition of WGS84
-    temp_sfglc <- st_sfc(temp_pnt, crs=4326)
+    temp_sfglc <- sf::st_sfc(temp_pnt, crs=4326)
     #Do a planar transform on the data to prep it for use in the st_intersects function
-    temp_sfglc_planar <- st_transform(temp_sfglc, 2163)
+    temp_sfglc_planar <- sf::st_transform(temp_sfglc, 2163)
 
     #Find the polygon which the given coordinates intersect.
-    country_value<-worldmap_planar[which(st_intersects(temp_sfglc_planar, worldmap_planar, sparse = FALSE)), ]$NAME_LONG
+    country_value<-worldmap_planar[which(sf::st_intersects(temp_sfglc_planar, worldmap_planar, sparse = FALSE)), ]$NAME_LONG
 
     #If it didn't find a country, it must be out in an ocean. This could be improved with a more detailed map that has polygons for the oceans.
     if(length(country_value)==0){

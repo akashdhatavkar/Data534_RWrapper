@@ -4,15 +4,8 @@
 \alias{fireball_data}
 \title{fireball_data}
 \usage{
-fireball_data(
-  date_min = NULL,
-  date_max = NULL,
-  min_energy = NULL,
-  max_energy = NULL,
-  min_velocity = NULL,
-  max_velocity = NULL,
-  lim = NULL
-)
+fireball_data(date_min, date_max, min_energy, max_energy, min_velocity,
+     max_velocity, min_altitude, max_altitude, lim)
 }
 \arguments{
 \item{date_min}{Exclude data earlier than this date YYYY-MM-DD or date/time YYYY-MM-DDThh:mm:ss}
