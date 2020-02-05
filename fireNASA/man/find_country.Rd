@@ -15,5 +15,5 @@ find_country(x, y)
 character object representing country name (i.e. "Canada") or the ocean ("OCEAN"), or an unknown location ("UNKNOWN")
 }
 \description{
-Helper function for finding country of coordinate pair based on polygons
+INTERNAL FUNCTION: Helper function for finding country of coordinate pair based on polygons
 }

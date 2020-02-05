@@ -23,7 +23,7 @@ Description: This package will download NASAs fireball dataset.
 Imports:
     jsonlite,
     httr,
-    sf
+    sf,
 Depends: R (>= 3.5.0)
 License: GPL-3
 Encoding: UTF-8
@@ -32,5 +32,7 @@ RoxygenNote: 7.0.2
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    rnaturalearth,
+    ggplot2
 VignetteBuilder: knitr

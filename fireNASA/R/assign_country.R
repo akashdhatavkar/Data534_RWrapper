@@ -1,8 +1,8 @@
-#' Assign country name to coordinates of fireballs in a dataframe
+#' INTERNAL FUNCTION: Assign country name to coordinates of fireballs in a dataframe
 #' @title assign_country
 #' @param inp_df the input dataframe retrieved from the fireball API
 #'
-#' @return the input dataframe with "country" (country name) column appended
+#' @return dataframe (same as input but with country name in new column)
 #'
 #' @import sf
 #'
@@ -12,8 +12,6 @@
 assign_country <- function(inp_df) {
   #Map data has already been prepped (can see script in the data-raw folder).
   #The planar-transformed version of the worldmap is saved as worldmap_planar.rda
-  #But need to state that it is a global variable
-  #utils::globalVariables(c(worldmap_planar))
 
   #Turn the fireball coordinates into numeric values
   #NOTE: If there NA's in the data, the resulting columns will have to be changed to numeric
@@ -22,13 +20,14 @@ assign_country <- function(inp_df) {
   inp_df$lon_signed <- as.numeric(inp_df$lon_signed)
   inp_df$lat_signed<- mapply(clean_latlon, inp_df$lat, inp_df$"lat-dir")
   inp_df$lat_signed <- as.numeric(inp_df$lat_signed)
-  #Finally apply the function ot assign the country
-  inp_df$country<-mapply(find_country, inp_df$lon_signed,inp_df$lat_signed)
+  #Finally apply the function to find the country for the coordinates
+  try(inp_df$country<-mapply(find_country, inp_df$lon_signed,inp_df$lat_signed))
   return(inp_df)
+
 }
 
 
-#' Clean Latitude or Longitude values
+#' INTERNAL FUNCTION: Clean Latitude or Longitude values
 #' @title clean_latlon
 #' @param x coordinate point to process (can be latitude or longitude)
 #' @param direction N/S for Latitude, E/W for Longitude
@@ -50,7 +49,7 @@ clean_latlon <- function(x, direction) {
 
 }
 
-#' Helper function for finding country of coordinate pair based on polygons
+#' INTERNAL FUNCTION: Helper function for finding country of coordinate pair based on polygons
 #' @title find_country
 #' @param x longitude point (expected as numeric)
 #' @param y latitude point (expected as numeric)
@@ -69,15 +68,15 @@ find_country <- function(x,y) {
     y<-as.numeric(y)
 
     #Create a simple feature
-    temp_pnt <- st_point(c(x,y))
+    temp_pnt <- sf::st_point(c(x,y))
     #Create a simple feature geometry list column
     #Using EPSG:4326 which is the EPSG definition of WGS84
-    temp_sfglc <- st_sfc(temp_pnt, crs=4326)
+    temp_sfglc <- sf::st_sfc(temp_pnt, crs=4326)
     #Do a planar transform on the data to prep it for use in the st_intersects function
-    temp_sfglc_planar <- st_transform(temp_sfglc, 2163)
+    temp_sfglc_planar <- sf::st_transform(temp_sfglc, 2163)
 
     #Find the polygon which the given coordinates intersect.
-    country_value<-worldmap_planar[which(st_intersects(temp_sfglc_planar, worldmap_planar, sparse = FALSE)), ]$NAME_LONG
+    country_value<-worldmap_planar[which(sf::st_intersects(temp_sfglc_planar, worldmap_planar, sparse = FALSE)), ]$NAME_LONG
 
     #If it didn't find a country, it must be out in an ocean. This could be improved with a more detailed map that has polygons for the oceans.
     if(length(country_value)==0){

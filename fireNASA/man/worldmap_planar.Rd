@@ -4,19 +4,19 @@
 \name{worldmap_planar}
 \alias{worldmap_planar}
 \title{World Map Planar dataset}
-\format{THIS IS PLACEHOLDER DATA!!!!!!:
+\format{A Simple Features dataframe with 177 rows and 95 variables
 \describe{
 
   ...
 }}
 \source{
-\url{http://www.google.com}
+\url{http://www.naturalearthdata.com}
 }
 \usage{
 worldmap_planar
 }
 \description{
-A dataset containing the prices and other attributes of almost 54,000
-diamonds.
+A dataset of world map shapefile data that has been transformed to planar using EPSG 2163 (US National Atlas Equal Area).
+Original data is ne_110m_admin_0_countries.shp which is "Made with Natural Earth. Free vector and raster map data @ naturalearthdata.com."
 }
 \keyword{datasets}
