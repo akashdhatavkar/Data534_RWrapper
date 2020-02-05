@@ -14,7 +14,7 @@
 #' @import httr jsonlite sf
 #' @export
 #' @usage fireball_data(date_min, date_max, min_energy, max_energy, min_velocity,
-#'      max_velocity, min_altitude, max_altitude, lim)
+#'      max_velocity, lim)
 #' @examples
 #' fireball_data(date_min = "2015-01-01", min_energy = 0.6, lim = 10)
 

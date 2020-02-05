@@ -10,8 +10,8 @@ assign_country(inp_df)
 \item{inp_df}{the input dataframe retrieved from the fireball API}
 }
 \value{
-the input dataframe with "country" (country name) column appended
+dataframe (same as input but with country name in new column)
 }
 \description{
-Assign country name to coordinates of fireballs in a dataframe
+INTERNAL FUNCTION: Assign country name to coordinates of fireballs in a dataframe
 }

@@ -5,7 +5,7 @@
 \title{fireball_data}
 \usage{
 fireball_data(date_min, date_max, min_energy, max_energy, min_velocity,
-     max_velocity, min_altitude, max_altitude, lim)
+     max_velocity, lim)
 }
 \arguments{
 \item{date_min}{Exclude data earlier than this date YYYY-MM-DD or date/time YYYY-MM-DDThh:mm:ss}

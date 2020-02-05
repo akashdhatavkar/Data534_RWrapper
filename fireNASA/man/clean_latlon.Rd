@@ -15,5 +15,5 @@ clean_latlon(x, direction)
 numeric with correct sign applied relative to equator (south=negative) or prime meridan (west=negative)
 }
 \description{
-Clean Latitude or Longitude values
+INTERNAL FUNCTION: Clean Latitude or Longitude values
 }

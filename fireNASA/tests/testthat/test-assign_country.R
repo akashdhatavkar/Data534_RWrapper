@@ -53,5 +53,18 @@ test_that("Check for proper responses in clean_latlon helper function", {
   expect_equal(clean_latlon(25.1,NA),25.1)
   expect_equal(clean_latlon(-25.1,NA),25.1)
   expect_equal(clean_latlon(NA,NA),abs(NA))
+})
 
+test_that("Check one valid country, one ocean, multiple edge cases in find_country", {
+  #Country, Latitude, Longitude
+  #Canada 49.941677, -119.396158
+
+  lat <-c(49.941677,2.2,NA,49.93,NA)
+  lon<-c(-119.396158,2.143959,174.2,NA,NA)
+
+  expect_equal(find_country(lon[1],lat[1]), "Canada")
+  expect_equal(find_country(lon[2],lat[2]), "OCEAN")
+  expect_equal(find_country(lon[3],lat[3]), "UNKNOWN")
+  expect_equal(find_country(lon[4],lat[4]), "UNKNOWN")
+  expect_equal(find_country(lon[5],lat[5]), "UNKNOWN")
 })
