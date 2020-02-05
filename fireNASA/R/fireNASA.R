@@ -1,28 +1,101 @@
-if(!require(httr)){install.packages("httr")};require(httr)
-if(!require(jsonlite)){install.packages("jsonlite")};require(jsonlite)
-
 ##----- Creating Function for API Get Request -----##
 #' @title fireball_data
 #'
 #' @description Wrapper for downloading NASA's Fireball Data
 #'
-#' @param lim Number of Rows needed
-#' @param min_e Exclude Data with Total-Radiated-Energy less than this positive value
+#' @param date_min Exclude data earlier than this date YYYY-MM-DD or date/time YYYY-MM-DDThh:mm:ss
+#' @param date_max Exclude data later than this date YYYY-MM-DD or date/time YYYY-MM-DDThh:mm:ss
+#' @param min_energy Exclude data with Total-Radiated-Energy less than this positive value in joules (e.g.,0.3)
+#' @param max_energy Exclude data with Total-Radiated-Energy less than this positive value
+#' @param min_velocity Exclude data with velocity-at-peak-brightness less than this positive value in km/s (e.g., 18.5)
+#' @param max_velocity Exclude data with velocity-at-peak-brightness greater than this positive value in km/s (e.g., 20)
+#' @param lim Number of rows to be displayed
 #'
+#' @import httr jsonlite sf
 #' @export
-#'
+#' @usage fireball_data(date_min, date_max, min_energy, max_energy,
+#'                min_velocity, max_velocity, lim)
 #' @examples
-#' fire_data(lim = 10, min_e = 0.6)
-fireball_data <- function(lim, min_e = NULL) {
-  url <- modify_url("https://ssd-api.jpl.nasa.gov/fireball.api")
-  if(is.null(min_e)){
-    resp <- GET(url, query  = list(limit = lim,`energy-min` = 0.6))
+#' fireball_data(date_min = "2015-01-01", min_energy = 0.6,
+#'                lim = 10)
+
+##----- Default parameters are set to NULL, incase does not want to enter all the fields -----##
+fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, max_energy = NULL,
+                          min_velocity = NULL, max_velocity = NULL, lim = NULL) {
+
+##------ In case any of the parameters have no input, setting some default values to run query -----##
+  if(is.null(date_min)){
+    date_min <- as.Date("1990-01-01", format = "%Y-%m-%d")
   }else{
-    resp <- GET(url, query  = list(limit = lim,`energy-min` = min_e))
+    if(nchar(date_min) > 10){
+      gsub(" %s", "",strptime(date_min, "%Y-%m-%d %H:%M:%S"))
+    }else{
+      date_min <- as.Date(date_min, "%Y-%m-%d")
+    }
   }
 
-  parsed <- jsonlite::fromJSON(content(resp,"text"))
-  as <- as.data.frame(parsed[["data"]])
-  colnames(as) <- parsed[["fields"]]
-  return(as)
+  if(is.null(date_max)){
+    date_max <- as.Date("2020-01-01", format = "%Y-%m-%d")
+  }else{
+    if(nchar(date_max) > 10){
+      gsub(" %s", "",strptime(date_max, "%Y-%m-%d %H:%M:%S"))
+    }else{
+      date_max <- as.Date(date_max, "%Y-%m-%d")
+    }
+  }
+
+  if(is.null(min_energy)){
+    min_energy <- 0.1
+  }
+
+  if(is.null(max_energy)){
+    max_energy <- 10
+  }
+
+  if(is.null(min_velocity)){
+    min_velocity <- 1
+  }
+
+  if(is.null(max_velocity)){
+    max_velocity <- 25
+  }
+
+  if(is.null(lim)){
+    lim <- 1000
+  }
+
+
+  url <- httr::modify_url("https://ssd-api.jpl.nasa.gov/fireball.api")
+  resp <- httr::GET(url, query  = list(`date-min` = date_min, `date-max` = date_max, `energy-min` = min_energy,
+                                 `energy-max` = max_energy, `vel-min` = min_velocity, `vel-max` = max_velocity,
+                                 limit = lim))
+
+##----- Check if request was correct -----##
+  if(resp$status_code == 400){
+    print("The request contained invalid keywords and/or content: details returned")
+  }else if(resp$status_code == 405){
+    print("The request used a method other than GET or POST")
+  }else if(resp$status_code == 500){
+    print("The database is not available at the time of the request")
+  }else if(resp$status_code == 503){
+    print("The server is currently unable to handle the request due to a temporary overloading or maintenance
+    of the server, which will likely be alleviated after some delay")
+  }
+
+  parsed <- jsonlite::fromJSON(httr::content(resp,"text"))
+
+##----- Check if API version is 1.0 -----##
+  if(parsed$signature[["version"]] != "1.0"){
+    print("The API version version does not match the version in the document,
+          there is no guarantee that the format has not changed!")
+  }
+
+  resultdf <- as.data.frame(parsed[["data"]])
+  colnames(resultdf) <- parsed[["fields"]]
+  #convert any factors to characters
+  inds <- sapply(resultdf, is.factor)
+  resultdf[inds] <- lapply(resultdf[inds], as.character)
+  resultdf <- assign_country(resultdf)
+  return(resultdf)
 }
+

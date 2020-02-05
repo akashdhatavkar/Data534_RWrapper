@@ -4,16 +4,28 @@
 \alias{fireball_data}
 \title{fireball_data}
 \usage{
-fireball_data(lim, min_e = NULL)
+fireball_data(date_min, date_max, min_energy, max_energy,
+               min_velocity, max_velocity, lim)
 }
 \arguments{
-\item{lim}{Number of Rows needed}
+\item{date_min}{Exclude data earlier than this date YYYY-MM-DD or date/time YYYY-MM-DDThh:mm:ss}
 
-\item{min_e}{Exclude Data with Total-Radiated-Energy less than this positive value}
+\item{date_max}{Exclude data later than this date YYYY-MM-DD or date/time YYYY-MM-DDThh:mm:ss}
+
+\item{min_energy}{Exclude data with Total-Radiated-Energy less than this positive value in joules (e.g.,0.3)}
+
+\item{max_energy}{Exclude data with Total-Radiated-Energy less than this positive value}
+
+\item{min_velocity}{Exclude data with velocity-at-peak-brightness less than this positive value in km/s (e.g., 18.5)}
+
+\item{max_velocity}{Exclude data with velocity-at-peak-brightness greater than this positive value in km/s (e.g., 20)}
+
+\item{lim}{Number of rows to be displayed}
 }
 \description{
 Wrapper for downloading NASA's Fireball Data
 }
 \examples{
-fire_data(lim = 10, min_e = 0.6)
+fireball_data(date_min = "2015-01-01", min_energy = 0.6,
+               lim = 10)
 }

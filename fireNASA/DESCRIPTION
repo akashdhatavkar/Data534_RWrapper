@@ -17,14 +17,22 @@ Authors@R:
            role = c("aut", "cre"),
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: This package will download NASAs fireball dataset. It will let you select the variables you wish to view and also provide some other variables
-  that have been Feature Engineered so that you have data in a usable form.
+Description: This package will download NASAs fireball dataset. 
+  It will let you select the variables you wish to view and also provide some other variables
+  that have been Feature Engineered so that you have a consubable data ready to use.
+Imports:
+    jsonlite,
+    httr,
+    sf,
+Depends: R (>= 3.5.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.2
 Suggests: 
+    testthat (>= 2.1.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    rnaturalearth,
+    ggplot2
 VignetteBuilder: knitr
-Imports: jsonlite

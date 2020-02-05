@@ -1,0 +1,87 @@
+---
+title: "plot-fireballs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{plot-fireballs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(fireNASA)
+library(rnaturalearth)
+library(sf)
+
+```
+
+# FireNASA package 
+## An API wrapper for accessing and extending the NASA Fireball dataset 
+
+The FireNASA package gives users access to NASA's freely available CNEOS Fireball dataset (see details here: (https://cneos.jpl.nasa.gov/fireballs/intro.html))
+
+Using the `fireball_data()` function a user can create a dataframe from the entire dataset or a subset of the data. In addition to the original data, columns of additional data will be available: 
+- parsed date/time information to easily filter and group by
+- name of the country that the fireball/bolide was above when the observation was made
+
+***
+
+## How to get the data
+
+There are several parameters that can be used to choose a subset of the data. If no parameters are given, the entire dataset will be given with the exception of observations that don't have a latitude/longitude coordinate.
+
+```{r message=FALSE}
+df <- fireball_data()
+```
+```{r echo=FALSE}
+knitr::kable(head(df), format="html")
+```
+
+We can see a selection of some of the data that has been returned. What if we only wanted very bright fireballs? Let's say with an estimated total impact energy of more than 30 kilotons. Yes, we could filter the data frame within R, but we can also just pull the minimum dataset needed from NASA:
+
+```{r message=FALSE}
+df2 <- fireball_data(min_energy=3)
+
+```
+```{r echo=FALSE}
+knitr::kable(head(df2), format="html")
+```
+
+**this isn't a very good subset. Need to figure out better parameters here**
+
+
+***
+***
+
+## Exploring the data
+
+While the fireball dataset is easily available for download in csv form, the useful thing about fireNASA is that the dataframe it yields has additional useful columns for exploring the data.
+
+
+
+#### First let's look at the added parsed time and date columns
+***
+
+```{r}
+#SOME EXAMPLE HERE WITH TIME SERIES
+```
+
+
+#### Now let's explore the country data
+***
+
+```{r}
+#EXAMPLE MAKING A BAR CHART OUT OF THE TOP 5 COUNTRIES
+```
+
+**Should we have a map example??**
+
+
+
+
