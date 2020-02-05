@@ -13,14 +13,17 @@
 #'
 #' @import httr jsonlite sf
 #' @export
-#' @usage fireball_data(date_min, date_max, min_energy, max_energy, min_velocity,
-#'      max_velocity, min_altitude, max_altitude, lim)
+#' @usage fireball_data(date_min, date_max, min_energy, max_energy,
+#'                min_velocity, max_velocity, lim)
 #' @examples
-#' fireball_data(date_min = "2015-01-01", min_energy = 0.6, lim = 10)
+#' fireball_data(date_min = "2015-01-01", min_energy = 0.6,
+#'                lim = 10)
 
+##----- Default parameters are set to NULL, incase does not want to enter all the fields -----##
 fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, max_energy = NULL,
                           min_velocity = NULL, max_velocity = NULL, lim = NULL) {
 
+##------ In case any of the parameters have no input, setting some default values to run query -----##
   if(is.null(date_min)){
     date_min <- as.Date("1990-01-01", format = "%Y-%m-%d")
   }else{
@@ -66,7 +69,27 @@ fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, m
   resp <- httr::GET(url, query  = list(`date-min` = date_min, `date-max` = date_max, `energy-min` = min_energy,
                                  `energy-max` = max_energy, `vel-min` = min_velocity, `vel-max` = max_velocity,
                                  limit = lim))
+
+##----- Check if request was correct -----##
+  if(resp$status_code == 400){
+    print("The request contained invalid keywords and/or content: details returned")
+  }else if(resp$status_code == 405){
+    print("The request used a method other than GET or POST")
+  }else if(resp$status_code == 500){
+    print("The database is not available at the time of the request")
+  }else if(resp$status_code == 503){
+    print("The server is currently unable to handle the request due to a temporary overloading or maintenance
+    of the server, which will likely be alleviated after some delay")
+  }
+
   parsed <- jsonlite::fromJSON(httr::content(resp,"text"))
+
+##----- Check if API version is 1.0 -----##
+  if(parsed$signature[["version"]] != "1.0"){
+    print("The API version version does not match the version in the document,
+          there is no guarantee that the format has not changed!")
+  }
+
   resultdf <- as.data.frame(parsed[["data"]])
   colnames(resultdf) <- parsed[["fields"]]
   #convert any factors to characters
