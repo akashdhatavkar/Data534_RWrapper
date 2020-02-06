@@ -72,13 +72,13 @@ fireball_data <- function(date_min = NULL, date_max = NULL, min_energy = NULL, m
 
 ##----- Check if request was correct -----##
   if(resp$status_code == 400){
-    print("The request contained invalid keywords and/or content: details returned")
+    return("The request contained invalid keywords and/or content: details returned")
   }else if(resp$status_code == 405){
-    print("The request used a method other than GET or POST")
+    return("The request used a method other than GET or POST")
   }else if(resp$status_code == 500){
-    print("The database is not available at the time of the request")
+    return("The database is not available at the time of the request")
   }else if(resp$status_code == 503){
-    print("The server is currently unable to handle the request due to a temporary overloading or maintenance
+    return("The server is currently unable to handle the request due to a temporary overloading or maintenance
     of the server, which will likely be alleviated after some delay")
   }
 
