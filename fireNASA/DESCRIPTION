@@ -37,5 +37,6 @@ Suggests:
     rnaturalearth,
     rnaturalearthdata,
     ggplot2,
-    rgeos
+    rgeos,
+    dplyr
 VignetteBuilder: knitr
