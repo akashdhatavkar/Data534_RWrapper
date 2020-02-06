@@ -24,6 +24,7 @@ Imports:
     jsonlite,
     httr,
     sf,
+    chron
 Depends: R (>= 3.5.0)
 License: GPL-3
 Encoding: UTF-8
