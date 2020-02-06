@@ -19,19 +19,21 @@ library(fireNASA)
 ```
 
 # FireNASA package 
-## An API wrapper for accessing and extending the NASA Fireball dataset 
+## An API wrapper that accesses and extends the NASA Fireball dataset 
 
-The FireNASA package gives users access to NASA's freely available CNEOS Fireball dataset (see details here: (https://cneos.jpl.nasa.gov/fireballs/intro.html))
+TThe fireNASA wrapper allows you to utilize NASA's freely available CNEOS Fireball dataset to investigate into the occurrence of fireballs by country, and by date. Fireballs or bolides are extremely bright meteors, which, when they hit the atmosphere, can as bright as or brighter than Venus at dawn.  They can sometimes be brighter than any object in the sky, except the sun or moon. They last 5-10 seconds.  They occur much more often than they are seen, partly due to their short duration and partly due to sky conditions (i. e. sun or clouds). 
 
-Using the `fireball_data()` function a user can create a dataframe from the entire dataset or a subset of the data. In addition to the original data, columns of additional data will be available: 
-- parsed date/time information to easily filter and group by
-- name of the country that the fireball/bolide was above when the observation was made
+You can investigate the occurrence of fireballs in your country using the `fireball_data()` function. It enables you to  do any or all of the following:
+- specify a range of dates or times for which you want fireball data
+- find the name of the country that a fireball/bolide was above when it was sighted
+- retrieve the entire dataset
 
+
+NASA's website can be accessed [here](https://cneos.jpl.nasa.gov/fireballs/intro.html))
 ***
 
-## How to get the data
-
-There are several parameters that can be used to choose a subset of the data. If no parameters are given, the entire dataset will be given with the exception of observations that don't have a latitude/longitude coordinate.
+## Retrieve the data
+First, determine if you would like the entire dataset or a subset.  If you would like the entire dataset, then no parameters are required. 
 
 ```{r message=FALSE}
 df <- fireball_data()
@@ -40,9 +42,10 @@ df <- fireball_data()
 ```{r echo=FALSE}
 knitr::kable(head(df), format="html")
 ```
+We've shown the first six rows above. Note that fireNASA does not retrieve observations that don't have latitude/longitude coordinates, even if you request the entire dataset.
 
-We can see a selection of some of the data that has been returned. What if we only wanted very bright fireballs? Let's say with an estimated total impact energy of more than 30 kilotons. Yes, we could filter the data frame within R, but we can also just pull the minimum dataset needed from NASA:
-
+###Select fireball brightness
+You can filter by energy typing 'fireball_data(min_energy=' and adding some number. Adding 'min_energy=3' delivers only fireballs with an estimated total impact energy of more than 30 kilotons.
 ```{r message=FALSE}
 df2 <- fireball_data(min_energy=3)
 
@@ -57,38 +60,35 @@ knitr::kable(head(df2), format="html")
 ***
 ***
 
-## Exploring the data
+## Explore the data
 
-While the fireball dataset is easily available for download in csv form, the useful thing about fireNASA is that the dataframe it yields has additional useful columns for exploring the data.
-
-
-
-#### First let's look at the added parsed time and date columns
+#### Separated time and date
+When you specify a date and time range, fireNASA automatically provides a time series graph so you can visualize fluctuations in fireball frequency over time.
 ***
 
-```{r}
-#SOME EXAMPLE HERE WITH TIME SERIES
+```{r results='hold', fig.height = 4, fig.width = 6, fig.align = "center"}
+library(ggplot2)
+library(dplyr)
+ggplot(df %>% group_by(as.numeric(substring(date,1,4))) %>% dplyr::tally() %>% 
+         rename(Year = `as.numeric(substring(date, 1, 4))`, No_ofFireballs = n),
+       aes(Year, No_ofFireballs)) + 
+  geom_line(color = "red", size = 1.5, linetype = 8)
 ```
 
-
-
 ## Working with Country Data
+When it retrieves the NASA data for you, fireNASA adds a column for country. The column is based on [Natural Earth](https://www.naturalearthdata.com/) (public domain). Note that all observations occuring over an ocean are given the label "OCEAN". If any observations had bad coordinate data, you will see them labeled as "UNKNOWN".
 
-The dataframe returned by fireNASA has an added column for country. This is based on public domain map data from Natural Earth (https://www.naturalearthdata.com/). Note that all observations occuring over an ocean are given the label "OCEAN". If any observations had bad coordinate data, they will be assigned a label of "UNKNOWN".
-
-#### Find the top 5 countries for most fireball observations:
-
-First let's find the top 5 countries for number of fireball events
-(Note that this can be done quite easily with dplyr package but here we're going to try to stick with a few baseR functions)
-We will be using the commonly used ggplot2 package to plot the results:
+#### How to graph countries for most fireball observations:
+You can use fireNASA to graph the top 5 countries for number of fireball events (This can be also be quite easily with dplyr package but fireNASA has a some of these functions built in for your convienence). fireNASA uses ggplot2:
 
 ```{r results='hold', fig.height = 4, fig.width = 6, fig.align = "center"}
 library(ggplot2)
 
-#use Run Length Encoding to get counts of all countries (excluding the countries "OCEAN" and "UNKNOWN")
+#use run length encoding to get counts of all countries (excluding the countries "OCEAN" and "UNKNOWN")
 country_cnts <- rle(sort(df$country[(df$country!="OCEAN"&df$country!="UNKNOWN")])) 
 #store results in a dataframe
-top5_df <- data.frame("country"=country_cnts$values,"count"=country_cnts$lengths, stringsAsFactors = FALSE)
+top5_df <- data.frame("country"=country_cnts$values,"count"=country_cnts$lengths, 
+                      stringsAsFactors = FALSE)
 #sort the dataframe by fireball count
 top5_df <- top5_df[order(top5_df$count, decreasing = TRUE),]
 #Take only the top 5
@@ -102,17 +102,17 @@ ggplot() + geom_bar(aes(x=factor(country, levels=top5_df$country),
                     data=top5_df,stat="identity") + 
   scale_fill_brewer(palette="Reds", direction=-1) +
   theme_dark() + labs(title = "Top 5 Countries", subtitle = "NASA fireball observations", 
-                      fill="Country") + xlab("Country")
+                      fill="Country") + xlab("Country") + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))  
 
 ```
 
 #### Plot the fireball observations on a world map:
-
-Now let's look at the fireball data on a worldmap. Additionally we'll outline the top five countries previously found. 
+fireNASA can also show the fireball data on a world map. Below, you see the map with the top five fireball countries highlighted in red.
 
 Note that the dataframe returned by fireNASA includes two processed coordinate fields `lat_signed` and `lon_signed`. These are latitude and longitude in decimal degrees. Southern latitudes and Western longitudes have a negative value applied. This makes it very straightforward to plot on a map.
 
-For the purpose of this example we'll be using ggplot2 again but we'll also be using the rnaturalearth package (and associated data package) to provide map information and we'll be using the sf (simple features) package and one of its helper packages (rgeos) to handle the map data for plotting.
+This example uses ggplot2 again as well as the rnaturalearth package (and associated data package) to provide map information and the sf (simple features) package as well as one of its helper packages (rgeos) to handle the map data for plotting.
 
 ```{r fig.height = 4, fig.width = 6, fig.align = "center"}
 
@@ -126,7 +126,12 @@ worldmap=ne_countries(returnclass="sf")
 top5_worldmap = worldmap[(worldmap$name_long %in% top5_df$country),]
 
 
-ggplot() + geom_sf(data=worldmap, aes(fill = NULL)) + geom_sf(data=top5_worldmap, colour="red") + geom_point(aes(x=df$lon_signed, y=df$lat_signed)) + labs(title = "NASA Fireball Observations", subtitle = "five countries with most observations outlined") + xlab("Longitude")+ ylab("Longitude")
+ggplot() + geom_sf(data=worldmap, aes(fill = NULL)) + 
+  geom_sf(data=top5_worldmap, colour="red") + 
+  geom_point(aes(x=df$lon_signed, y=df$lat_signed)) + 
+  labs(title = "NASA Fireball Observations", 
+       subtitle = "five countries with most observations outlined") +
+  xlab("Longitude")+ ylab("Longitude")
 
 ```
 
