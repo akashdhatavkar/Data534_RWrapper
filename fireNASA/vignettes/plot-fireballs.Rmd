@@ -16,9 +16,6 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(fireNASA)
-library(rnaturalearth)
-library(sf)
-
 ```
 
 # FireNASA package 
@@ -39,6 +36,7 @@ There are several parameters that can be used to choose a subset of the data. If
 ```{r message=FALSE}
 df <- fireball_data()
 ```
+
 ```{r echo=FALSE}
 knitr::kable(head(df), format="html")
 ```
@@ -73,15 +71,63 @@ While the fireball dataset is easily available for download in csv form, the use
 ```
 
 
-#### Now let's explore the country data
-***
 
-```{r}
-#EXAMPLE MAKING A BAR CHART OUT OF THE TOP 5 COUNTRIES
+## Working with Country Data
+
+The dataframe returned by fireNASA has an added column for country. This is based on public domain map data from Natural Earth (https://www.naturalearthdata.com/). Note that all observations occuring over an ocean are given the label "OCEAN". If any observations had bad coordinate data, they will be assigned a label of "UNKNOWN".
+
+#### Find the top 5 countries for most fireball observations:
+
+First let's find the top 5 countries for number of fireball events
+(Note that this can be done quite easily with dplyr package but here we're going to try to stick with a few baseR functions)
+We will be using the commonly used ggplot2 package to plot the results:
+
+```{r results='hold', fig.height = 4, fig.width = 6, fig.align = "center"}
+library(ggplot2)
+
+#use Run Length Encoding to get counts of all countries (excluding the countries "OCEAN" and "UNKNOWN")
+country_cnts <- rle(sort(df$country[(df$country!="OCEAN"&df$country!="UNKNOWN")])) 
+#store results in a dataframe
+top5_df <- data.frame("country"=country_cnts$values,"count"=country_cnts$lengths, stringsAsFactors = FALSE)
+#sort the dataframe by fireball count
+top5_df <- top5_df[order(top5_df$count, decreasing = TRUE),]
+#Take only the top 5
+top5_df <- top5_df[0:5,]
+print(top5_df)
+
+#Now make a bar chart
+
+ggplot() + geom_bar(aes(x=factor(country, levels=top5_df$country), 
+                        y=count,fill=factor(country, levels=top5_df$country)),
+                    data=top5_df,stat="identity") + 
+  scale_fill_brewer(palette="Reds", direction=-1) +
+  theme_dark() + labs(title = "Top 5 Countries", subtitle = "NASA fireball observations", 
+                      fill="Country") + xlab("Country")
+
 ```
 
-**Should we have a map example??**
+#### Plot the fireball observations on a world map:
+
+Now let's look at the fireball data on a worldmap. Additionally we'll outline the top five countries previously found. 
+
+Note that the dataframe returned by fireNASA includes two processed coordinate fields `lat_signed` and `lon_signed`. These are latitude and longitude in decimal degrees. Southern latitudes and Western longitudes have a negative value applied. This makes it very straightforward to plot on a map.
+
+For the purpose of this example we'll be using ggplot2 again but we'll also be using the rnaturalearth package (and associated data package) to provide map information and we'll be using the sf (simple features) package and one of its helper packages (rgeos) to handle the map data for plotting.
+
+```{r fig.height = 4, fig.width = 6, fig.align = "center"}
+
+library(sf)
+library(rgeos)
+library(rnaturalearth)
+library(rnaturalearthdata)
 
 
+worldmap=ne_countries(returnclass="sf")
+top5_worldmap = worldmap[(worldmap$name_long %in% top5_df$country),]
+
+
+ggplot() + geom_sf(data=worldmap, aes(fill = NULL)) + geom_sf(data=top5_worldmap, colour="red") + geom_point(aes(x=df$lon_signed, y=df$lat_signed)) + labs(title = "NASA Fireball Observations", subtitle = "five countries with most observations outlined") + xlab("Longitude")+ ylab("Longitude")
+
+```
 
 
