@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/akashdhatavkar/Data534_RWrapper.svg?branch=master)](https://travis-ci.org/akashdhatavkar/Data534_RWrapper)
 
-## fireballNASA
+## fireNASA
 
 The objective of fireNASA is to provide the user with a clean consumable
 data from NASA’s fireball API based on the users criteria
