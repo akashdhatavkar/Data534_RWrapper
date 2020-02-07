@@ -1,0 +1,166 @@
+---
+title: "Data534 Project Journal"
+author: "Alex Tamm"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+2020-01-21
+----------
+Micheal Labun joined team. Spoke with Dr. Naryan re: Code of Conduct and Workflow documents.
+
+Started draft of the documents, but will be easier to hammer them out in person with the team.
+
+Read through httr article on Best Practices of making an API wrapper. Do not understand the "S3" object that is created.
+
+2020-01-24
+---------
+Started reading R packages by Hadley Wickham (finished first 2 chapters)
+
+Met with team at Mike's apt and discussed wrapper design, division of work, and other details like code style and scheduling.
+
+Important takeaways:
+1. Wrapper's primary purpose will be to get data via the Fireball API, clean and extend it (with continent, maybe timezone offset, and some formatting for timeseries). This means it will basically have 1 function with sub functions to help prep the data frame. User is expected to be comfortable with R and using dataframes, wrapper just provides the nice dataframe of fireball data.
+2. We'll be using the code style detailed in chaper 1 (R Code) of Wickham.
+3. My focus is to be figuring out the continent assignment function and research unit testing (we will each research this).
+4. Unit testing to be implemented using Travis CI by Monday the 27th.
+
+2020-01-25
+--------
+Working on other projects today. Cloned the repo that Akash has created and created my branch. Successfully loaded the project. Will need to try creating a new function tomorrow to temporarily house my continent-assigning function. Will make any merging less dangerous right now as I don't understand the current state of the main function.
+
+2020-01-26
+--------
+Spent some time exploring available options for finding if a point is in a polygon. The functions I've found seem to all be parts of rather large packages that import more packages themselves. This is not ideal but I am leaning towards using 'sp' as it appears to be maintained and popular.
+
+2020-01-28
+--------
+
+I settled on using sp::point.in.polygon() and have taken some very rough continent boundaries from the following post:
+#https://stackoverflow.com/questions/13905646/get-the-continent-given-the-latitude-and-longitude
+I'm not comfortable including this person's work in the final code (not sure if I have permission to AND also not happy with the precision). I think that as long as it is appropriately accredited I can reuse the standard continent boundaries that ESRI has available. I need to look into this or see if there is a fully free dataset of polygons. Alternatively I may just do my own trace that is a bit more precise than the one provided in the post. 
+Also need to look into if West Longitude is negative? Need to sort out the terrible default column names (contain spaces!) in the .csv I imported of fireball data. This won't be a problem in the final code but for testing I need to use this csv. Also need to test the code I've written but at a stopping point for the night. 
+
+I also will need to look into proper unit testing and documentation for my code but decided that was holding me back from starting to tackle the problem. Travis CI can wait!
+
+2020-01-29
+--------
+Found a good source of public domain maps. However, this will mean storing a ~5MB dataset in our package and using various GIS tools. Will need to get a better idea of the scope of this and then discuss with team. For reference, this is the citation they suggest if we wish to credit them (and why wouldn't we?)
+
+`Made with Natural Earth. Free vector and raster map data @ naturalearthdata.com.`
+
+I'm working through this tutorial to learn how best to work with the data: https://stanford.edu/~vbauer/teaching/mapping.html
+But it turns out the author isn't doing what he claims to be doing (using downloaded maps). Instead he uses a package called `rnaturalmaps` which I do *not* want to include. 
+
+I've found references to the `sf` package being the most current and applicable for my task so I've switched to it and am following this stackoverflow post as a guide to how to do what I want to do: https://gis.stackexchange.com/questions/282750/identify-polygon-containing-point-with-r-sf-package
+
+2020-01-30
+-------
+Discussed scope of my function with the team and they were on board (didn't think it was too much). Made tentative plans to get my head wrapped around unit testing in R this weekend and depending on progress, meet on Sunday to work on starting to merge and such in person.
+
+I also need to find out if there is an equivalent concept to "private methods" in R. I don't want my function to be user addressable but I think it is going to be large enough that it should live outside of our main function.
+
+2020-02-01
+-------
+
+#### Is there something like a private method in R?   
+Not that I can find. This is really annoying. I guess the simplest solution is to just embed my function in the main function.
+
+#### Working on my function   
+Apparently the st.intersects function requires everything to be projected to planar. My assumption is that the NASA data is in WGS84 simply because that is such a common geodetic datum. SF makes use of EPSG definitions of coordinate systems and the EPSG coordinate system that corresponds with WGS84 is EPSG 4326. Furthermore EPSG 2163 is the US National Atlas Equal Area which can be used for a planar transform so that the points and shapefile data are all in the coordinate system that st_intersects expects.
+
+I need to decide how I want to handle the NA values in Latitude/Longitude columns. Do I keep changing the resulting coordinates to as.numeric? Do I put in 0 values? 
+
+My function appears to have successfully assigned countries. To confirm I plotted all the points that were assigned "OCEAN" to see if they fall outside of the country polygons - this proved that the results look reasonable AND I can plot them on a map that's based on the data we'll be including. That second part might be useful for the vigenette.
+
+2020-02-02
+-------
+
+#### Is there something like a private method in R? (The Story Continues...)   
+I missed some of the required reading and was too narrow in the terms I was searching for. Yes, we can choose which functions are available to the user. This is defined under "export" and is discussed in the namespace part of the text.
+
+#### Working on my function
+
+Cleaned up the code and made some decisions about how to split up the code between several functions. Overall concept is:
+
+assign_country() function will be fed the dataframe the primary function snags using an API and it will return a dataframe with an appended column for the country where the coordinates lie. 
+
+assign_country will load and prep required worldmap data from the data folder and also process/clean the coordinate columns from the input dataframe. Then it will check every pair of coordinates against the polygons in the worldmap data to find which polygon they lay inside of and the name of that polygon. The results will be stored in a 'country' column in the input dataframe and then that dataframe will be returned. 
+
+The two abnormal cases are: 
+1. one or both coordinates are NA - in this case it will assign the country "UNKNOWN". 
+2. the coordinates don't fall inside a polygon - in this case it will assume they are in the ocean and assign the country "OCEAN". **This will be an issue if there are coordinates out of range of a map (i.e 180>Lat<-180)**
+
+I got the assign_country() and it's associated helper functions created and documented. I'm still not sure if I should include documentation for functions that won't be exported.
+
+Eventually got assign_country integrated into the package. Had to make changes to the main 'fireball_data()' function because it was storing everything as a factor. Lesson (re)learned: check *ALL* the details of your input (including datatypes!!!) when trying to troubleshoot why a function isn't working.
+
+**Multiple commits associated with this, [here's the primary one.](https://github.com/akashdhatavkar/Data534_RWrapper/commit/9f40677e59b2be4bdd4ba64aa0bab42e80aaecc3)**
+
+#### Other
+
+Mike was having some issues pushing a draft viginette this afternoon, we are going to sort out the git issues in person tomorrow.
+
+#### Testing
+
+Moved on to writing unittests. Got two of them added in and that caused me to notice I would get unexpected results if the input to a function was negative, so I fixed that. I then moved on to using travis CI. 
+
+Lots of trouble getting the sf package to install in travis CI, but finally tried enough suggestions from forum posts that I hit upon the solution (but I don't understand enough about linux and R package distribution to say what exactly the additional config settings do). It may be installing more than needed in the build config but it works. Ran into assorted other issues (i.e. example in fireball_data not returning any data) and some tweaks needed to remove the warnings when I tested the package against CRAN requirements.
+
+It took about 3 hours to get travis CI working and given it crashed and errored three different times (and worked when the build was restarted with no changes made), I am not sure that it is a very reliable part of the workflow for building an R package. I think there 17 commits involved in all the attempts I made. **Here is the commit for [the final attempt that worked.](https://github.com/akashdhatavkar/Data534_RWrapper/commit/6a6ad24bd0ddca6d83e46aef0b65fc59943f42b7)**
+
+
+2020-02-03
+-------
+We couldn't get OSX to work in Travis-CI and were given permission to abandon our efforts and just stick with testing in linux.
+
+We had a lot of trouble trying to merge Mike's branch with the master to get his viginette in there. So we created a new viginette in my branch and merged that. 
+
+Akash is going to make the httr / API-related function more robust by adding some if statements to check for http error codes, incorrect API version, and empty data frame.
+
+I'm going to properly document the worldmap_planar dataset, make sure I explicitly call libraries that I'm using (i.e sf::), and look into encapsulating my functions try statements (even if I don't add catches with custom error messages). 
+
+2020-02-04
+-------
+Have added my explicit calls to libraries in the assign_country.r file (all were for sf::)
+
+Have added documentation for the worldmap_planar.rda data (as data.r in the R/ folder)
+
+Wrapped the call to find_country (in assign_country) in a try block. Didn't put a custom catch statement.
+
+Because I can never remember this:
+
+ - **Latitude = N<->S**     
+ - **Longitude = E<->W**
+
+Added one last test in for assign_country (to specifically check find_country(). Not of much use at the moment since it is basically being tested through the assign_country tests but doing this gives better test coverage)
+
+Threw a bit more of an outline into the vignette but ran into an issue with the main fireball_data() function. By default it should return all the data in the data set, not an arbritrary subset. The default values need to be changed and I will discuss this with Akash after the exams tomorrow.
+
+2020-02-05
+-------
+Looked into the default values for a little bit this morning but arealized I was just repeating work Akash had already done. Met with Akash and Mike around 12:30PM and made plans for how we'll finish up work on the project for presentation tomorrow. Spent about 15 minutes trying to get Mike's git repo working again. I need to research how .gitignore files work and how to deal with the issues we keep running into with his computer. Currently it says it is up to date but doesn't match the repository. Since none of the three of us can sort it out and we are worried it might break something, Mike will be collaborating via Slack while Akash and I handle pushing/merging stuff on the repo.
+
+I made two examples for the vignette: plotting a bar chart of top 5 countries for number of fireball observations and plotting a map with the fireball data overlayed. This caused even more packages to get glommed onto the "suggests" field in the DESCRIPTION file - not great but unavoidable at this point. 
+
+**Here's the associated commit for the [improved vignette](https://github.com/akashdhatavkar/Data534_RWrapper/commit/08f105e33f7d7c1edb3239ecb2653be4ed6098ef)**
+
+Have been collaborating with Mike on the text of the vignette and have also looked into code coverage. We are at ~76% at the moment due to the large amount of if-statements required in the main fireball_data() function. 
+
+Added a few tests to the existing one for the main function. I don't want to add anymore because it means hitting the API many times for one battery of tests. Too late in the project to figure this out but I suspect it needs some sort of "test-mode" in the main function. I think that might be the way to do unit-testing with API calls - something to fake the communication with the API. 
+
+2020-02-06
+-------
+A few final updates to the vignette (mostly encorporating what Mike has done, with a few typo corrections and such). Some last minute discusson on who will cover what in the presentation.
+
+After presentation discussed what needs to be wrapped up. Mike did a few tiny edits to the vignette and I also renamed/re-titled it before pushing the update.
+
+2020-02-07
+-------
+Resisting my urges to mess with the code, add features, etc!!! Only finishing up this journal (going back and adding a couple git commit links) and finalizing the code of conduct and contributing documents (these have been living as drafts since we met back on Jan 24!). Pushing this journal and the current version of the two documents and this should be my last commit to the repo!
+
+
+
