@@ -19,4 +19,5 @@ in mind
 
 ## Example
 `fireNASA::fireball_data()`
+
 `fireNASA::fireball_data(date_min = "2015-01-01", lim = 50)`
