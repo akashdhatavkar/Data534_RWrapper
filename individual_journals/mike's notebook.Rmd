@@ -1,0 +1,91 @@
+---
+title: "notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+__Jan 24__ 
+- taking notes on the materials in preparation for our meeting later today
+- looked at all fireball sites
+- took a note of vignettes
+- going to experiment with usethis, the second item in the list of references
+- read 5 chapters of "And Introduction to API" book
+
+https://r-mageddon.netlify.com/post/writing-an-r-package-from-scratch/
+  
+-  good for learning how to use usethis better
+
+But I haven't learnt anything about the scraping.  I'll try this:
+https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html
+
+**this will be good I think:**
+```{r}
+library(httr)
+github_api <- function(path) {
+  url <- modify_url("https://api.github.com", path = path)
+  GET(url)
+}
+
+resp <- github_api("/repos/hadley/httr")
+
+
+```
+
+__Jan 25__
+Worked all day on my code portion and got NOWHERE! AKKKKK!
+
+__Jan 29__
+Finally got my time and date separation code working!!  During this, I discovered (from talking to my classmates and experimenting myself) how helpful it can be to:
+1.  Type in *very* specific searches
+2. Briefly examine a page from top to bottom to see if it will answer my question before continuing
+3. Having confirmed that this page is 85%+ likely to answer my question, start at the top and go through, skimming the text and focusing on the code. 
+4. If the "best" example doesn't work on Stack Overflow, try the next one.  
+5. If that doesn't get me anywhere, consider the deadline. Either do something else and come back to it (this is the **hardest** part for me and I need to get better at it) or slack someone the question.
+https://github.com/akashdhatavkar/Data534_RWrapper/commit/48e07006fadd1bc939872fb1e4419d0eb09bafe4
+
+__Jan 29__
+Had everyone to my place to work on it for 3 hours.  I think we're clearer on all this.
+
+__Feb 1__
+- Updated git hub. 
+https://github.com/akashdhatavkar/Data534_RWrapper/commit/a4bbd0b41cf77fd81928f05bad5495b9b502e7af
+https://github.com/akashdhatavkar/Data534_RWrapper/commit/a4bbd0b41cf77fd81928f05bad5495b9b502e7af
+Had to learn "git reset --hard" I could get everyone else's code without fuss.  
+
+- Not sure if/how my code is needed anymore.  I"ll have to ask the guys tomorrow.
+
+__Feb 2__
+- Watching John Muschelli's videos  on R Package Develoment (recommended by Akash) and taking notes.
+- His second video describes how to create vignettes.  I've been comissioned to get this started, so I did.  The only thing is that he's talking a lot about modifiying functions, and I'm not doing that, so I guess I'll take notes on it for later.
+- Created vignette, uploaded onto git hub
+https://github.com/akashdhatavkar/Data534_RWrapper/commit/e04e2208a80efe3bceb1378aa4ddb1c12e0d6bfc
+https://github.com/akashdhatavkar/Data534_RWrapper/commit/11c11d416d1e2dc2a7d3f18b9c441af028f8dfed
+https://github.com/akashdhatavkar/Data534_RWrapper/commit/11c11d416d1e2dc2a7d3f18b9c441af028f8dfed
+__Feb 3__
+- Because so much work was simultaneously done on the weekend decided it would actually be safer to add the vignette onto Alex's computer, then modify it again, and go from there.
+
+**Feb 5**
+-met with gang to divvy up work
+- turns out Akash didn't see my code, even thought I'm sure I saw it on git hub.
+- struggled with git hub on my mac. Specifically, git hub doesn't merge on my computer because it is concerned about a file that doesn't match. It wants me to stash it, or delete it. However, we can't find it, even when I press cmd+shift+period to reveal hidden documents. So we're stumped.  The only option is that I delete everything.
+- However, the problem doesn't end there. Sometimes when I upload onto git hub I cause a problem in the main branch. 
+https://github.com/akashdhatavkar/Data534_RWrapper/commit/5cdd9a06358525a3797266116d6ec398b4f60fe0
+https://github.com/akashdhatavkar/Data534_RWrapper/commit/b77cf4b7ca72cd84820fc17a7f5f3d4c33f8e21c
+- Also, in the process of trying to make everything work, I've created *three* github branches: "mike," "Mike," and "mike2".  "Mike" was accidental. We've deleted everything except for "mike".
+- We've decided that we're going to just use slack for my documents because I don't want to cause problems with main. This will make it more difficult to track my contributions, but it's not worth messing up the code everyone's written!
+-worked on vignette, researching fireballs, re-writing parts of it, adding an introduction for accessibility.  
+-slacked vignette and code to Akash 
+Note: for the rest of the time, I do not use git hub for this reason.
+
+__Feb 6__
+- Did presentation. We made sure everybody spoke. Alex and Akash did an amazing job. Did it quickly because we were overtime.
+
+__Feb 7__ 
+-Added my git links to the journal. I'll try slacking it to the boys instead of uploading it. 
+
+
