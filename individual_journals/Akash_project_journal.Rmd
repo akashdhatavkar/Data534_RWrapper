@@ -1,0 +1,44 @@
+---
+title: "Data 534 Akash Journal"
+author: "Akash Dhatavkar"
+date: "08/02/2020"
+output: html_document
+---
+
+**Date: 2020-01-20**
+---
+Started reading about building packages in R. Also looked into the NASA Api to understand the API
+
+**Date: 2020-01-25**
+---
+Met with Alex and Mike to discuss what the scope of our wrapper should be. I suggested using the latitude and longitude co-ordinates provided in the data to use to create a column called country so that users can have that information included as well. I also suggested that we split the date column in date and time columns so that users can do some time series work if they are interested. I created a public git repository and the skeleton for our package, i.e created the project, roxygen file and all the basic necessities so that everyone can start on their respective tasks. I then tried to create a yml file, but it had errors and kept failing the build
+
+**Date: 2020-01-27**
+---
+Deleted the yml file since it was not helpful. Edited the description file. Added the imports, authors name and license. And created the help document for the package
+
+**Date: 2020-01-30**
+---
+Started watching videos to understand how to do unit-testing in R
+
+
+**Date: 2020-02-02**
+---
+Created some unit tests for the main function. Alex managed to created a yml file, so I could test out the basic functions that I had a created for the wrapper
+
+**Date: 2020-02-04**
+---
+Added some much required checks in the package like the version check, checks to return the error if the code os not 200. Initially I had put a print statement for the code error, Alex caught that mistake and changed it to return. Cleaned the help documentation so that it was properly formatted
+
+**Date: 2020-02-05**
+---
+Alex, Mike and I had decided we would use the absolute minimum/maximum values of all the parameters so that users can get the entire data available (without NA's) if they did not pass any parameters. It took me a long time to figure out what the min and max values could be. i.e for minimum velocity, I thought of putting very small like 0.000001, but this kept throwing an error. Turned out the lowest I could put was 0.01, same with the max, I couldn't put anything above 1000. Checked the code coverage. It was about 79%. Alex added 2 more tests to the main function which made the coverage touch 81%. Incorporated Mikes, date-time split function into the main code. Added the time series chart to the vignette which Mike and Alex had already worked on and edited. Some of my tests failed. Realised I had to add a few packages in the suggests section of the description. 
+
+**Date: 2020-02-06**
+---
+Discussed with the group on how the presentation should be carried out. We decided we would show the Fireball Api on the site and then walk through our wrapper.
+
+**Date: 2020-02-07**
+---
+Edited the Readme file on git, so that it had a small easy description of the package with a example. 
+
